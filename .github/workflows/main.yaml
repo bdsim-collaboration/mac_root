@@ -1,0 +1,70 @@
+name: build mac root
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  build-root:
+    name: Build root
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      checks: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        root-version: ["v6-36-00", "v6-36-02"]
+        os: [macOS-13, macOS-14, macOS-15]
+
+    steps:
+      - uses: actions/checkout@v4       
+
+      - name: Install brew dependencies on MacOS
+        if: runner.os == 'macOS'
+        run: .github/bin/install-deps-macos.sh
+
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v2
+        id: cpu-cores
+
+      - name: Build root
+        shell: bash
+        run: |
+          git clone https://github.com/root-project/root.git
+          cd root
+          git checkout ${{ matrix.root-version }}
+          cd ../
+          mkdir root-build
+          mkdir root-${{ matrix.root-version }}
+          cd root-build 
+          cmake -DCMAKE_INSTALL_PREFIX=../root-${{ matrix.root-version }} ../root 
+          make -j${{ steps.cpu-cores.outputs.count }} 
+          make install
+          cd ../
+          tar vzcf root-${{ matrix.os }}-${{ matrix.root-version }}.tgz root-${{ matrix.root-version }}
+
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          name: Release ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: false
+          prerelease: false
+          allowUpdates: true
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./root-${{ matrix.os }}-${{ matrix.root-version }}.tgz
+          asset_name: root-${{ matrix.os }}-${{ matrix.root-version }}.tgz
+          asset_content_type: application/gzip
