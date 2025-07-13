@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        root-version: ["v6-36-00", "v6-36-02"]
+        root-version: ["v6-30-04", "v6-32-10", "v6-34-04"]
         os: [macOS-13, macOS-14, macOS-15]
 
     steps:

@@ -3,7 +3,7 @@
 Hack for rootcint for conda build for macosx_arm64
 
 ## Builds 
- * root (v6-36-00, v6-36-00)
+ * root (v6-30-04, v6-32-10, v6-34-04)
  * Apple and Intel silicon (macOS-13, macOS-14, macOS-15)
 
 ## Usage
