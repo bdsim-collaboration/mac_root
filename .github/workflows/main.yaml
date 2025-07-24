@@ -43,7 +43,7 @@ jobs:
           mkdir root-build
           mkdir root-${{ matrix.root-version }}
           cd root-build 
-          cmake -DCMAKE_INSTALL_PREFIX=../root-${{ matrix.root-version }} ../root 
+          cmake -Dminimal=ON -DCMAKE_INSTALL_PREFIX=../root-${{ matrix.root-version }} ../root 
           make -j${{ steps.cpu-cores.outputs.count }} 
           make install
           cpack
