@@ -46,7 +46,7 @@ jobs:
           cmake -DCMAKE_INSTALL_PREFIX=../root-${{ matrix.root-version }} ../root 
           make -j${{ steps.cpu-cores.outputs.count }} 
           make install
-	  cpack
+          cpack
           cd ../
           tar vzcf root-${{ matrix.os }}-${{ matrix.root-version }}.tgz root-${{ matrix.root-version }}
 
