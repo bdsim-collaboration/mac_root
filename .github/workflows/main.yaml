@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        root-version: ["v6-30-04", "v6-32-10", "v6-34-04"]
+        root-version: ["v6-30-08", "v6-32-10", "v6-34-04"]
 #        os: [macOS-13, macOS-14, macOS-15]
         os: [macOS-13]
 
@@ -43,10 +43,12 @@ jobs:
           mkdir root-build
           mkdir root-${{ matrix.root-version }}
           cd root-build 
-          cmake -Dminimal=ON -DCMAKE_INSTALL_PREFIX=../root-${{ matrix.root-version }} ../root 
+          cmake -Dminimal=ON -Dbuiltin_lz4=ON -DCMAKE_INSTALL_PREFIX=../root-${{ matrix.root-version }} ../root 
           make -j${{ steps.cpu-cores.outputs.count }} 
           make install
           cd ../
+	  otool -L root-${{ matrix.root-version }}/rootcint
+	  otool -L root-${{ matrix.root-version }}/lib*
           tar vzcf root-${{ matrix.os }}-${{ matrix.root-version }}.tgz root-${{ matrix.root-version }}
 
       - name: Create Release
