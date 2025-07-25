@@ -47,7 +47,9 @@ jobs:
           make -j${{ steps.cpu-cores.outputs.count }} 
           make install
           cd ../
-          otool -L root-${{ matrix.root-version }}/rootcint
+	  ls -l root-${{ matrix.root-version }}/bin
+	  ls -l root-${{ matrix.root-version }}/lib
+          otool -L root-${{ matrix.root-version }}/rootcling
           otool -L root-${{ matrix.root-version }}/lib*
           tar vzcf root-${{ matrix.os }}-${{ matrix.root-version }}.tgz root-${{ matrix.root-version }}
 
