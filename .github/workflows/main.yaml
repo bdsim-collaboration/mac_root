@@ -51,6 +51,7 @@ jobs:
           ls -l root-${{ matrix.root-version }}/lib
           otool -L root-${{ matrix.root-version }}/bin/rootcint
           otool -L root-${{ matrix.root-version }}/lib/lib*
+	  cp /usr/local/opt/zstd/lib/libzstd.1.dylib root-${{ matrix.root-version }}/lib/
           tar vzcf root-${{ matrix.os }}-${{ matrix.root-version }}.tgz root-${{ matrix.root-version }}
 
       - name: Create Release
