@@ -43,7 +43,7 @@ jobs:
           mkdir root-build
           mkdir root-${{ matrix.root-version }}
           cd root-build 
-          cmake -Dminimal=ON -Dbuiltin_lzlib=ON -dbuiltin_zstd=ON  -Dbuiltin_lz4=ON -DCMAKE_INSTALL_PREFIX=../root-${{ matrix.root-version }} ../root 
+          cmake -Dminimal=ON -Dbuiltin_lzlib=ON -Dbuiltin_zstd=ON  -Dbuiltin_lz4=ON -DCMAKE_INSTALL_PREFIX=../root-${{ matrix.root-version }} ../root 
           make -j${{ steps.cpu-cores.outputs.count }} 
           make install
           cd ../
